@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% block 'title' %} repo-code | editar {{tag.human_name}} {% endblock %}
+
+{% block 'scripts' %}
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src = "{% static 'js/codemirror/lib/codemirror.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/selection/active-line.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/edit/matchbrackets.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/clike/clike.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/python/python.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/hint/show-hint.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/htmlmixed/htmlmixed.js' %}"></script>
+{% endblock %}
+
+{% block 'css' %}
+<link href = "{% static 'js/codemirror/lib/codemirror.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block 'main' %}
+    <div class="modal fade" id="modalDelete" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title"> Exclusão </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label = "Close"></button>
+             </div>
+
+            <div class="modal-body">
+                Tem certeza que deseja excluir pernamentemente esta tag?
+            </div>
+
+            <div class="modal-footer">
+                <form method = "POST" action = "{% url 'repo_tag_delete' tag.id %}">
+                    <button class="btn btn-danger" type = "submit">Excluir </a>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class = "container">
+        <form method = "post" action = "{% url 'repo_tag_upd' tag.id %}" autocomplete = "off">
+            {% csrf_token %}
+            <div class = "form-group">
+                <label> Nome </label>
+                <input name = "name" class = "form-control" value = "{{tag.name}}">
+            </div>
+            <hr>
+            <div class = "form-group">
+                <label> Descrição </label>
+                <textarea id = "description" name = "description" class = "form-control" wrap = "off"> {{tag.description}} </textarea>
+            </div>
+            <br>
+            <div class = "text-end">
+                <button class = "btn btn-primary" type = "submit"> submeter </button>
+            <a role = "button" class = "btn btn-danger" href = "#" data-bs-toggle="modal" data-bs-target="#modalDelete"> deletar </a>
+                <a class = "btn btn-secondary" href = "{% url 'repo_tag_upd' tag.id %}"> cancelar </a>
+            </div>
+        </form>
+    </div>
+
+    <script type = "text/javascript">
+        let cm = CodeMirror.fromTextArea(document.getElementById("description"), {
+              lineNumbers: true, 
+              styleActiveLine: true,
+              mode: "text/html",
+              lineWrapping: false,
+              matchBrackets: true
+        });
+    </script>
+
+{% endblock %}

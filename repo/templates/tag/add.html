@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block 'title' %} repo-code | adicionar tag {% endblock %}
+
+{% block 'scripts' %}
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src = "{% static 'js/codemirror/lib/codemirror.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/selection/active-line.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/edit/matchbrackets.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/clike/clike.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/python/python.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/hint/show-hint.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/htmlmixed/htmlmixed.js' %}"></script>
+{% endblock %}
+
+{% block 'css' %}
+<link href = "{% static 'js/codemirror/lib/codemirror.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block 'main' %}
+    <div class = "container">
+        <h1 class = "text-center"> Cadastre uma nova tag </h1>
+        <p class = "text-center"> Cadastre uma tag que poderá ser usada para encontrar os códigos mais fácilmente</p>
+        <form method = "post" action = "{% url 'repo_tag_add' %}" autocomplete = "off">
+            {% csrf_token %}
+            <div class = "form-group">
+                <label> Nome </label>
+                <input name = "name" class = "form-control">
+            </div>
+            <hr>
+            <div class = "form-group">
+                <label> Descrição (HTML) </label>
+                <textarea id = "description" name = "description" class = "form-control" wrap = "off"></textarea>
+            </div>
+            <br>
+            <div class = "text-end">
+                <button class = "btn btn-primary" type = "submit"> submeter </button>
+                <a class = "btn btn-secondary" href = "{% url 'repo_tag_add' %}"> cancelar </a>
+            </div>
+        </form>
+    </div>
+
+    <script type = "text/javascript">
+        let cm = CodeMirror.fromTextArea(document.getElementById("description"), {
+              lineNumbers: true, 
+              styleActiveLine: true,
+              mode: "text/html",
+              lineWrapping: false,
+              matchBrackets: true
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}
+repo-code
+{% endblock %}
+
+{% block 'scripts' %}
+<script src = "{% static 'js/codemirror/lib/codemirror.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/selection/active-line.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/edit/matchbrackets.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/clike/clike.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/python/python.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/hint/show-hint.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/htmlmixed/htmlmixed.js' %}"></script>
+{% endblock %}
+
+{% block 'css' %}
+<link href = "{% static 'js/codemirror/lib/codemirror.css' %}" rel="stylesheet">
+<link href = "{% static 'js/codemirror/addon/hint/show-hint.css' %}" rel="stylesheet">
+
+{% for css in css_files %}
+    <link href = "{% static css %}" rel = "stylesheet">
+{% endfor %}
+
+{% endblock %}
+
+{% block 'main' %}
+
+<div class = "container">
+    <h1 class = "text-center">Cadastro de código</h1>
+    <p class = "text-center">cadastre aqui um novo código e a sua descrição</p>
+    <form method = "post" action = "{% url 'repo_code_add' %}" autocomplete = "off">
+        {% csrf_token %}
+        <div class = "row">
+            <div class = "col">
+                <div class = "form-group">
+                    <label> Título </label>
+                    <input class = "form-control" name = "title">
+                </div>
+            </div>
+            <div class = "col">
+                <div class = "form-group">
+                    <label> Original </label>
+                    <input name = "original" class = "form-control">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class = "form-group">
+            <label> Descrição (HTML) </label>
+            <textarea id = "description" class = "form-control" name = "description" rows = "25"></textarea>
+        </div>
+        <hr>
+        <div class = "form-group">
+            <label> Código fonte </label>
+            <textarea id = "source" class = "form-control" name = "source" wrap = "off" autocomplete = "off"></textarea>
+        </div>
+        <hr>
+        <div class = "row">
+            <div class = "col">
+                 <div class = "form-group">
+                    <label> Linguagem </label>
+                    <select id = "language" name = "language" class = "form-control">
+                        {% for lang, hulang in languages %}
+                            <option value = "{{lang}}"> {{hulang}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class = "col">
+                <div class = "form-group">
+                    <label> Tags </label>
+                    <select name = "tags" class = "form-control" multiple>
+                        {% for tag in tags %}
+                            <option value = "{{tag.id}}">{{tag.human_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class = "text-end">
+            <button type = "submit" class = "btn btn-primary"> submeter </button>
+        </div>
+    </form>
+</div>
+
+<script type = "text/javascript">
+
+    let cmDescription = CodeMirror.fromTextArea(document.getElementById("description"), {
+          lineNumbers: true, 
+          styleActiveLine: true,
+          mode: "text/html",
+          lineWrapping: false,
+          matchBrackets: true
+    });
+
+    let cmSource = CodeMirror.fromTextArea(document.getElementById("source"), {
+          lineNumbers: true, 
+          styleActiveLine: true,
+          mode: "text/x-c++src",
+          lineWrapping: false,
+          matchBrackets: true
+    });
+
+    $("#language").on("change", function() {
+        let index = $(this).prop("selectedIndex");
+
+        const modes = [{lang: "c", mode: "text/x-csrc"}, 
+                       {lang: "c++", mode: "text/x-c++src"}, 
+                       {lang: "c#", mode: "text/x-csharp"}, 
+                       {lang: "python", mode: "text/x-python"},  
+                       {lang: "java", mode: "text/x-java"}, 
+                       {lang: "javascript", mode: "text/javascript"}
+                      ];
+
+        modes.sort((a, b) => {
+            if(a.lang < b.lang) return -1;
+            return a.lang > b.lang ? 1 : 0;
+        });
+
+        cmSource.setOption("mode", modes[index].mode);
+    });
+</script>
+
+{% endblock %}

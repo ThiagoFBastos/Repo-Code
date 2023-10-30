@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block 'title' %}
+	404
+{% endblock %}
+
+{% block 'main' %}
+	<div class = "container">
+		<h1 class = "text-danger text-center">Error</h1>
+		<p class = "text-center">
+			Parece que acabou de ocorrer um problema durante a sua requisição
+		</p>
+		<p class = "text-center">
+			Motivo: {{message}}
+		</p>
+	</div>
+{% endblock %}

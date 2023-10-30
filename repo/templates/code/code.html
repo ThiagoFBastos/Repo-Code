@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block 'title' %}
+{{ source.title }}
+{% endblock %}
+
+{% block 'scripts' %}
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src = "{% static 'js/codemirror/lib/codemirror.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/selection/active-line.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/edit/matchbrackets.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/clike/clike.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/python/python.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/javascript/javascript.js' %}"></script>
+<script src = "{% static 'js/codemirror/addon/hint/show-hint.js' %}"></script>
+<script src = "{% static 'js/codemirror/mode/htmlmixed/htmlmixed.js' %}"></script>
+{% endblock %}
+
+{% block 'css' %}
+<link href = "{% static 'js/codemirror/lib/codemirror.css' %}" rel="stylesheet">
+<link href = "{% static 'js/codemirror/addon/hint/show-hint.css' %}" rel="stylesheet">
+
+{% for css in css_files %}
+    <link href = "{% static css %}" rel = "stylesheet">
+{% endfor %}
+{% endblock %}
+
+{% block 'main' %}
+<div class="modal fade" id="tagsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Categorias </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <ul>
+                {% for tag in source.tags.all %}
+                    <li>
+                        <a class = "btn btn-link" href = "{% url 'repo_tag_view' tag.id %}"> {{ tag.human_name }} </a>
+                    </li>
+                {% endfor %}
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"  data-bs-backdrop="static" id="saveCodeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> Ação </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"</button>
+          </div>
+          <div class="modal-body">
+            Tem certeza que dejesa salvar este código ? <br>
+            Essa ação não poderá ser desfeita.
+          </div>
+          <div class="modal-footer">
+            <button type="button" id = "btnSubmitSourceForm" class="btn btn-primary" data-bs-dismiss="modal">Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class = "container">
+
+    <div class = "row">
+        <h1>{{ source.title }}</h1>
+    </div>
+
+    <hr>
+
+    <div class = "row">
+        <div class = "col">
+            Criado em
+        </div>
+        <div class = "col">
+            {{ source.createdAt }}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class = "row">
+        <div class = "col">
+            Alterado em
+        </div>
+        <div class = "col">
+            {{ source.updatedAt }}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class = "row">
+        <div class = "col">
+            Tags
+        </div>
+        <div class = "col">
+            {% for tag in partial_tags %}
+                <a class = "btn btn-sm btn-success" href = "{% url 'repo_tag_view' tag.id %}"> {{ tag.human_name }} </a>
+            {% endfor %}
+
+            {% if source.tags.count > 3 %}
+                <a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#tagsModal"> ... </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if source.original %}
+    <hr>
+
+    <div class = "row">
+        <div class = "col">
+            Original
+        </div>
+        <div class = "col">
+            <a href = "{{source.original}}" target = "__blank"> {{ source.title }} </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <hr>
+
+    <div class = "row">
+        <div class = "col">
+            Linguagem de programação
+        </div>
+        <Div class = "col">
+            {{ source.human_language.title }}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class = "row">
+        <div class = "row">
+            <h4> Descrição </h4>
+        </div>
+        <div class = "row">
+            {{ source.full_description | safe }}
+        </div>
+    </div>
+   
+    <hr>
+
+    <div class = "row">
+        <div class = "row">
+            <h2> Código Fonte </h2>
+        <div>
+        <div class = "row">
+            <form id = "sourceForm" method = "post" action = "{% url 'repo_code_update_source' source.id %}">
+                {% csrf_token %}
+
+                <div class = "row">
+                    <textarea id = "editor" name = "source" wrap = "off" autocomplete = "off">{{source.source.strip}}</textarea>
+                </div>
+
+                <div class = "row">
+                    <div class = "col">
+                        <div class = "form-group">
+                            <label> Linguagem </label>
+                            <select id = "language" name = "language" class = "form-select form-select-sm w-auto" >
+                                {% for lang, hu_lang in languages %}
+                                    {% if source.language == lang %}
+                                        <option value = "{{lang}}" selected> {{hu_lang}} </option>
+                                    {% else %}
+                                        <option value = "{{lang}}"> {{hu_lang}} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class = "col">
+                        <div class = "form-group">
+                            <label> tema </label>
+                            <select id = "theme" class = "form-select form-select-sm w-auto" >
+                               <option selected> default </option>
+                               {% for theme in themes %}
+                                    <option> {{theme}} </option>
+                               {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "text-end">
+                    <button type = "button" data-bs-toggle="modal" data-bs-target="#saveCodeModal" class = "btn btn-primary btn-sm"> salvar código </button>
+
+                    <a class = "btn btn-warning btn-sm"  href = "{% url 'repo_code_update' source.id  %}"> editar campos </a> </h1>
+
+                    <a class = "btn btn-secondary btn-sm" href = "{% url 'repo_code_view' source.id %}"> cancelar </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type = "text/javascript">
+
+    const modes = [{lang: "c++", mode: "text/x-c++src"}, 
+           {lang: "c", mode: "text/x-csrc"}, 
+           {lang: "c#",mode: "text/x-csharp"}, 
+           {lang: "python", mode: "text/x-python"}, 
+           {lang: "java", mode: "text/x-java"}, 
+           {lang: "javascript", mode: "text/javascript"}
+    ];
+
+    function find_language_mode(target) {
+        for(let i = 0; i < modes.length; ++i) {
+            if(target == modes[i].lang)
+                return modes[i].mode;
+        }
+        return -1;
+    }
+
+    $("#language").on("change", function() {
+        let index = $(this).prop("selectedIndex");
+
+        let child = $($(this).children()[index]);
+
+        let language = $(child).prop("innerHTML").trim();
+        
+
+        modes.sort((a, b) => {
+            if(a.lang < b.lang) return -1;
+            return a.lang > b.lang ? 1 : 0;
+        });
+
+        cm.setOption("mode", modes[index].mode);
+    });
+
+    let cm = new CodeMirror.fromTextArea(document.getElementById("editor"), {
+          lineNumbers: true, 
+          styleActiveLine: true,
+          lineWrapping: false,
+          matchBrackets: true,
+          mode: find_language_mode("{{source.human_language}}")
+    });
+
+    $("#theme").on("change", function() {
+        let index = $(this).prop("selectedIndex");
+
+        let child = $($(this).children()[index]);
+
+        let theme = $(child).prop("innerHTML").trim();
+
+        cm.setOption("theme", theme);
+    });
+
+    $("#btnSubmitSourceForm").on("click", () => $("#sourceForm").submit());
+</script>
+
+{% endblock %}
+
+
