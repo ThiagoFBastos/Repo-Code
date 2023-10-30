@@ -1,7 +1,0 @@
-o que fazer em seguir:
-    . diminuir a quantidade de tags para mostrar (um popup que mostra todas as tags)
-    . colocar variantes da mesma tag (melhorar a busca)
-    . colocar mais tags
-    . colocar mais códigos (outras linguagens tb e não só competitive programming)
-    . melhorar o navbar dos links das páginas
-    . 
