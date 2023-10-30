@@ -9,7 +9,7 @@ import os
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
 
-# Create your views here.
+# Create your views here
 
 @require_http_methods(['GET'])
 def source(request, key):
@@ -52,7 +52,7 @@ def search_by_keywords(request):
     title = request.GET.get('title', '')
     tags = list(map(int, request.GET.getlist('tags')))
     page = int(request.GET.get('page', 1))
-    asc = int(request.GET.get('asc', 1))
+    asc = int(request.GET.get('asc', 1)) 
     language = request.GET.get('language', '-1')
     fromDate = request.GET.get('fromDate', '0001-01-01')
     toDate = request.GET.get('toDate', timezone.now().date().__str__())
