@@ -74,6 +74,9 @@ def tag_results(request, key):
         'asc': asc
     }
 
+    URL_FIRST_PARAMS = {'page': 1, 'asc': asc ^ 1}
+    URL_FIRST = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_FIRST_PARAMS)}"
+
     URL_NEXT = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_NEXT_PARAMS)}"
 
     URL_PAGES = []
@@ -94,17 +97,12 @@ def tag_results(request, key):
     'URL_PAGES': URL_PAGES,
     'total_results': total_results,
     'URL_PREVIOUS': URL_PREVIOUS if page > 1 else None,
-    'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else None
+    'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else None,
+    'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else None
     })
 
 @require_http_methods(['GET'])
 def all_tags(request):
     tags = Tag.objects.order_by('name')
-
-    rows = []
-
-    for k, tag in enumerate(tags):
-        if k % 4 == 0: rows.append([])
-        rows[-1].append(tag)
-
+    rows = [[tags[k + i] for i in range(4) if k + i < len(tags)] for k in range(0, len(tags), 4)]
     return render(request, 'tag/all.html', {'tags' : rows})

@@ -134,6 +134,19 @@ def search_by_keywords(request):
 
     URL_PAGES = []
 
+    URL_FIRST_PARAMS = {
+        'title': title,
+        'asc': asc,
+        'page': 1,
+        'language': language,
+        'fromDate': fromDate,
+        'toDate': toDate,
+        'tags': tags
+    }
+
+    URL_FIRST = f"{reverse('repo_search_by_keys')}?{urlencode(URL_FIRST_PARAMS, True)}"
+
+
     start_delta = max(1, page - 2) - page
 
     for delta in range(start_delta, start_delta + 5):
@@ -158,7 +171,8 @@ def search_by_keywords(request):
         'asc': asc,
         'total_results': total_results,
         'URL_PREVIOUS': URL_PREVIOUS if page > 1 else False,
-        'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else False
+        'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else False,
+        'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else None
     })
 
 @require_http_methods(['GET', 'POST'])
