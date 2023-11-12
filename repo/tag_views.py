@@ -5,8 +5,17 @@ from django.urls import reverse
 from unidecode import unidecode
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_http_methods
+from django.core import serializers
+from django.http import HttpResponse
 
 # Create your views here.
+
+@require_http_methods(['GET'])
+def filter_tags(request):
+    text = request.GET.get('text')
+    tags = Tag.objects.filter(name__startswith = text)
+    tags = serializers.serialize('json', tags)
+    return HttpResponse(tags, content_type = 'application/json')
 
 @require_http_methods(['POST'])
 def delete(request, pk):

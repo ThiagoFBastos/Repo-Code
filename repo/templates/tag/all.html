@@ -6,14 +6,53 @@ Tags
 
 {% block 'main' %}
     <div class = "container">
-        {% for row in tags %}
-            <div class = "row">
-                {% for tag in row %}
-                    <div class = "col">
-                        <a class = "btn btn-sm btn-link" href = "{% url 'repo_tag_view' tag.id %}"> {{ tag.human_name }} </a>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
+        <h1 class="text-center">Tags</h1>
+        <p class="text-center">Aqui estão armazenadas todas as tags dos códigos cadastrados</p>
+        <input type = "text" id = "filter" class = "form-control form-control-sm">
+
+        <div class = "container" id = "container">
+            {% for row in tags %}
+                <div class = "row">
+                    {% for tag in row %}
+                        <div class = "col">
+                            <a class = "btn btn-sm btn-link" href = "{% url 'repo_tag_view' tag.id %}"> {{ tag.human_name }} </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <script type="text/javascript">
+        $("#filter").on("keyup", function() {
+            let text = $(this).val();
+
+            $.get("{% url 'tag_filter' %}", {text: text}, function(data) {
+                let container = $("#container");
+
+                container.children().remove();
+
+                for(let i = 0; i < data.length; i += 4) {
+                    let row = $("<div></div>");
+
+                    row.prop("class", "row");
+
+                    for(let j = 0; j < 4 && i + j < data.length; ++j) {
+                        let col = $("<div></div>");
+                        let link = $("<a></a>")
+                        col.prop("class", "col btn btn-link");
+                        link.prop("href", `/repo/tag/${data[i + j].pk}`);
+                        link.text(data[i + j].fields.human_name);
+                        console.log(data[i + j].fields.human_name);
+                        col.append(link);
+                        row.append(col);
+                    }
+
+                    container.append(row);
+
+                    console.log(container);
+                }
+            });
+        });
+    </script>
 {% endblock %}

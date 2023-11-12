@@ -71,6 +71,7 @@ def search_by_keywords(request):
 
     if len(tags):
         if logicTag == 'AND':
+            print(sources)
             subquery = Tag.objects.filter(Q(id__in = tags) & Q(code__id = OuterRef("pk"))) \
             .annotate(placeholder = Value(1)) \
             .values('placeholder') \
@@ -96,14 +97,15 @@ def search_by_keywords(request):
     total_results = sources.count()
 
     sources = sources[low : high]
-
+    print(sources)
     URL_FLIP_CREATEDAT_PARAMS = {'page': page,
                                  'asc': asc ^ 1,
                                  'title': title,
                                  'language': language,
                                  'fromDate': fromDate,
                                  'toDate': toDate,
-                                 'tags': tags
+                                 'tags': tags,
+                                 'logicTag': logicTag
                                 }
 
     URL_FLIP_CREATEDAT = f"{reverse('repo_search_by_keys')}?{urlencode(URL_FLIP_CREATEDAT_PARAMS, True)}"
@@ -115,7 +117,8 @@ def search_by_keywords(request):
         'language': language,
         'fromDate': fromDate,
         'toDate': toDate,
-        'tags': tags
+        'tags': tags,
+        'logicTag': logicTag
     }
 
     URL_PREVIOUS = f"{reverse('repo_search_by_keys')}?{urlencode(URL_PREVIOUS_PARAMS, True)}"
@@ -127,7 +130,8 @@ def search_by_keywords(request):
         'language': language,
         'fromDate': fromDate,
         'toDate': toDate,
-        'tags': tags
+        'tags': tags,
+        'logicTag': logicTag
     }
 
     URL_NEXT = f"{reverse('repo_search_by_keys')}?{urlencode(URL_NEXT_PARAMS, True)}"
@@ -141,7 +145,8 @@ def search_by_keywords(request):
         'language': language,
         'fromDate': fromDate,
         'toDate': toDate,
-        'tags': tags
+        'tags': tags,
+        'logicTag': logicTag
     }
 
     URL_FIRST = f"{reverse('repo_search_by_keys')}?{urlencode(URL_FIRST_PARAMS, True)}"
@@ -159,7 +164,8 @@ def search_by_keywords(request):
                           'language': language,
                           'fromDate': fromDate,
                           'toDate': toDate,
-                          'tags': tags
+                          'tags': tags,
+                          'logicTag': logicTag
                           }
             URL = f"{reverse('repo_search_by_keys')}?{urlencode(URL_PARAMS, True)}"
             URL_PAGES.append((p, p == page , URL))

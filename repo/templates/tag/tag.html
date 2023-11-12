@@ -5,7 +5,9 @@ Tag: {{ tag.human_name }}
 {% endblock %}
 
 {% block 'main' %}
-<div class = "container-fluid">
+
+{% if sources.all.count > 0 %}
+    <div class = "container-fluid">
     <div class = "row">
         <h1>
             {{ tag.human_name }}
@@ -63,12 +65,12 @@ Tag: {{ tag.human_name }}
             
             {% if URL_PREVIOUS %}
                 <li class="page-item">
-      		        <a class="page-link" href="{{URL_PREVIOUS}}">&lsaquo;</a>
-   		        </li> 
+                    <a class="page-link" href="{{URL_PREVIOUS}}">&lsaquo;</a>
+                </li> 
             {% else %}
                 <li class="page-item disabled">
-      			    <a class="page-link" href="#" tabindex="-1">&lsaquo;</a>
-   			    </li>
+                    <a class="page-link" href="#" tabindex="-1">&lsaquo;</a>
+                </li>
             {% endif %}
 
             {% if URL_FIRST %}
@@ -83,25 +85,33 @@ Tag: {{ tag.human_name }}
             {% for page, current, URL in URL_PAGES %}
                 {% if current %}
                 <li class = "page-item active">
-				    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
-			    </li>
+                    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
+                </li>
                 {% else %}
                 <div class = "page-item">
-				    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
-			    </div>
+                    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
+                </div>
                 {% endif %}
             {% endfor %}
 
             {% if URL_NEXT %}
                 <li class="page-item">
-      		        <a class="page-link" href="{{URL_NEXT}}">&rsaquo;</a>
-   		        </li> 
+                    <a class="page-link" href="{{URL_NEXT}}">&rsaquo;</a>
+                </li> 
             {% else %}
                 <li class="page-item disabled">
-      			    <a class="page-link" href="#" tabindex="-1">&rsaquo;</a>
-   			    </li>
+                    <a class="page-link" href="#" tabindex="-1">&rsaquo;</a>
+                </li>
             {% endif %}
         </ul>
     </nav>
 </div>
+
+{% else %}
+        <h1 class = "text-center text-warning"> Nenhum resultado foi encontrado </h1>
+            <p class="text-center">
+                Tente outros parâmetros que fornecam um resultado válido
+            </p>
+{% endif %}
+
 {% endblock %}
