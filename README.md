@@ -11,6 +11,7 @@ Repositório local feito com Django para gardar códigos e procurá-los através
 
 1. Coloque no terminal o seguinte comando: python3 manage.py runserver
 2. Visite no seu terminal a página: localhost:8000/repo
+3. É possível adicionar descrições em html combinado com latex, que deve ser usado dentro da tag "\(<código>\)"
 
 ![Tela inicial](https://github.com/ThiagoFBastos/Repo-Code/blob/main/inicio.png)
 ![Busca](https://github.com/ThiagoFBastos/Repo-Code/blob/main/busca.png)
