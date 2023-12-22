@@ -11,6 +11,16 @@
 	<script src = "{% static 'js/bootstrap.min.js' %}" type = "text/javascript"> </script>
 	<script src = "{% static 'js/bootstrap.bundle.min.js' %}" type = "text/javascript"> </script>
     {% block 'scripts' %} {% endblock %}
+    <style>
+        {% if request.session.backgroundTheme == 'on' %}
+            body {
+                background-color: #211e21
+            }   
+            :not(option, span, textarea, div, table), .btn-link {
+                color: white
+            }
+        {% endif %}
+    </style>
 </head>
 <body>
 
@@ -32,6 +42,9 @@
                         <li> <a class = "dropdown-item" href = "{% url 'repo_tag_all' %}"> Todas as tags </a> </li>
                         <li> <a class = "dropdown-item" href = "{% url 'repo_tag_add' %}"> Adicionar tag </a> </li>
                       </ul>
+                    </li>
+                    <li class = "nav-item">
+                        <a class = "nav-link" href = "{% url 'repo_preferences' %}">Preferências</a>
                     </li>
                 </ul>
             </div>

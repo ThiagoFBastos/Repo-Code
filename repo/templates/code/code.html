@@ -32,14 +32,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title"> Categorias </h5>
+            <h5 class="modal-title" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}> Categorias </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}>
             <ul>
                 {% for tag in source.tags.all %}
                     <li>
-                        <a class = "btn btn-link" href = "{% url 'repo_tag_view' tag.id %}"> {{ tag.human_name }} </a>
+                        <a  {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %} class = "btn btn-link" href = "{% url 'repo_tag_view' tag.id %}"f> {{ tag.human_name }} </a>
                     </li>
                 {% endfor %}
             </ul>
@@ -55,10 +55,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title"> Ação </h5>
+            <h5 class="modal-title" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}> Ação </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}>
             Tem certeza que dejesa salvar este código ? <br>
             Essa ação não poderá ser desfeita.
           </div>
@@ -181,11 +181,19 @@
                     </div>
                     <div class = "col">
                         <div class = "form-group">
-                            <label> tema </label>
+                            <label>tema</label>
                             <select id = "theme" class = "form-select form-select-sm w-auto" >
-                               <option selected> default </option>
+                               {% if request.session.codeTheme == 'default' %}
+                                    <option  selected>default</option>
+                               {% else %}
+                                    <option>default</option>
+                               {% endif %}
                                {% for theme in themes %}
-                                    <option> {{theme}} </option>
+                                    {% if theme == request.session.codeTheme %}
+                                        <option selected> {{theme}} </option>
+                                    {% else %}
+                                        <option>{{theme}}</option>
+                                    {% endif %}
                                {% endfor %}
                             </select>
                         </div>
@@ -245,16 +253,19 @@
           matchBrackets: true,
           mode: find_language_mode("{{source.human_language}}")
     });
-
-    $("#theme").on("change", function() {
-        let index = $(this).prop("selectedIndex");
-
-        let child = $($(this).children()[index]);
-
+    
+    function themeColorChange(data) {
+        let index = $("#theme").prop("selectedIndex");
+        let child = $($("#theme").children()[index]);
         let theme = $(child).prop("innerHTML").trim();
-
         cm.setOption("theme", theme);
-    });
+    }
+
+    $("#theme").on("change", themeColorChange);
+   
+    $("#theme").ready(function() {
+        themeColorChange();
+    })
 
     $("#btnSubmitSourceForm").on("click", () => $("#sourceForm").submit());
 </script>

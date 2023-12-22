@@ -13,7 +13,7 @@ from django.http import HttpResponse
 @require_http_methods(['GET'])
 def filter_tags(request):
     text = request.GET.get('text')
-    tags = Tag.objects.filter(name__startswith = text)
+    tags = Tag.objects.filter(human_name__startswith = text)
     tags = serializers.serialize('json', tags)
     return HttpResponse(tags, content_type = 'application/json')
 

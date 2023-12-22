@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block 'title' %}
+Preferências
+{% endblock 'title' %}
+
+{% block 'main' %}
+    <div class = "container" style = "width:300px">
+        <form action = "" method = "post">
+            {% csrf_token %}
+            <div class = "form-check form-switch text-center">
+              <input class="form-check-input" type="checkbox" name = "backgroundTheme" {% if request.session.backgroundTheme == 'on' %} checked {% endif %}}>
+              <label class="form-check-label" id = "backgroundTheme">
+                Tema Claro/Escuro
+            </label>
+            </div>
+            <div class = "form-group">
+                <label>Tema do código</label>
+                <select class = "form-control" name = "codeTheme">
+                    {% if request.session.codeTheme == 'default' %}
+                        <option value = "default">default</option>
+                    {% else %}
+                        <option value = "default" selected>default</option>
+                    {% endif %} 
+                    {% for theme in themes %}
+                        {% if theme == request.session.codeTheme %}
+                            <option value = "{{theme}}" selected>{{theme}}</option>
+                        {% else %}
+                            <option value = "{{theme}}">{{theme}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class = "d-grid">
+                <button type = "submit" class = "btn btn-primary">Enviar</button>
+            </div>
+        </form>
+    </div>
+{% endblock 'main' %}

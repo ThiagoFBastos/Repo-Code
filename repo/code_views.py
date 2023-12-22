@@ -20,7 +20,14 @@ def source(request, key):
         themes = os.listdir(os.path.join('templates', 'static', 'js', 'codemirror', 'theme'))
         css_files = list(map(lambda f: os.path.join('js', 'codemirror', 'theme', f), themes))
         themes = list(map(lambda t: t.split('.')[0], themes))
-        return render(request, 'code/code.html', {'source' : code, 'partial_tags': partial_tags, 'themes': themes, 'css_files': css_files, 'languages': languages})
+        print(request.session.get('codeTheme'))
+        return render(request, 'code/code.html', {
+            'source' : code, 
+            'partial_tags': partial_tags, 
+            'themes': themes, 
+            'css_files': css_files, 
+            'languages': languages
+        })
     except ObjectDoesNotExist as ex:
         return render(request, '404.html', {'message': ex})
 
@@ -97,7 +104,7 @@ def search_by_keywords(request):
     total_results = sources.count()
 
     sources = sources[low : high]
-    print(sources)
+
     URL_FLIP_CREATEDAT_PARAMS = {'page': page,
                                  'asc': asc ^ 1,
                                  'title': title,

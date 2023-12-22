@@ -34,7 +34,7 @@ Início
                     <input type = "text" id = "filterSelectTags" class = "form-control form-control-sm">
                     <select id = "candidateTags" class = "form-control" multiple>
                         {% for tag in tags %}
-                            <option value = "{{tag.id}}">{{tag.human_name}}</option>
+                            <option class = "fix-theme" value = "{{tag.id}}">{{tag.human_name}}</option>
                         {% endfor %}
                     </select>
                 </div>    
@@ -71,8 +71,8 @@ Início
             </div>
         </div>
         <div class = "text-end">
-                        <button type = "button" id = "selectReset" class = "btn btn-secondary btn-sm"> reset </button>
-                    </div>
+            <button type = "button" id = "selectReset" class = "btn btn-secondary btn-sm"> reset </button>
+        </div>
 
         <div class = "form-group">
             <label> Linguagem </label>

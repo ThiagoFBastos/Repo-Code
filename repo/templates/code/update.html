@@ -58,11 +58,11 @@ repo-code
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title"> Ação </h5>
+                <h5 class="modal-title" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}> Ação </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label = "Close"></button>
              </div>
 
-            <div class="modal-body">
+            <div class="modal-body" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}>
                 Tem certeza que deseja salvar esses dados pernamentemente? <br>
                 Essa ação não poderá ser desfeita
             </div>
@@ -98,7 +98,7 @@ repo-code
 
         <div class = "form-group">
             <label> Descrição </label>
-            <textarea id = "description" class = "form-control" name = "description" rows = "25">{{source.description.strip}}</textarea>
+            <textarea class = "fix-theme" id = "description" class = "form-control" name = "description" rows = "25">{{source.description.strip}}</textarea>
         </div>
 
         <hr>
@@ -108,9 +108,9 @@ repo-code
             <select name = "tags" class = "form-control" multiple>
                 {% for tag in tags %}
                     {% if tag.id in tags_id %}
-                        <option value = "{{tag.id}}" selected> {{tag.human_name}} </option>
+                        <option class = "fix-theme" value = "{{tag.id}}" sselected> {{tag.human_name}} </option>
                     {% else %}
-                        <option value = "{{tag.id}}"> {{tag.human_name}} </option>
+                        <option class = "fix-theme" value = "{{tag.id}}"> {{tag.human_name}} </option>
                     {% endif %}
                 {% endfor %}
             </select>
