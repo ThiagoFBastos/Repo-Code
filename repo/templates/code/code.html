@@ -182,17 +182,17 @@
                     <div class = "col">
                         <div class = "form-group">
                             <label>tema</label>
-                            <select id = "theme" class = "form-select form-select-sm w-auto" >
+                            <select id = "theme" name = "theme" class = "form-select form-select-sm w-auto" >
                                {% if request.session.codeTheme == 'default' %}
-                                    <option  selected>default</option>
+                                    <option value = "default" selected>default</option>
                                {% else %}
-                                    <option>default</option>
+                                    <option value = "default">default</option>
                                {% endif %}
                                {% for theme in themes %}
                                     {% if theme == request.session.codeTheme %}
-                                        <option selected> {{theme}} </option>
+                                        <option value = "{{theme}}" selected> {{theme}} </option>
                                     {% else %}
-                                        <option>{{theme}}</option>
+                                        <option value = "{{theme}}">{{theme}}</option>
                                     {% endif %}
                                {% endfor %}
                             </select>

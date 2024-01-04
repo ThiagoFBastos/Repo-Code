@@ -8,6 +8,7 @@ from django.utils import timezone
 import os
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.sessions.models import Session
 
 # Create your views here
 
@@ -20,7 +21,6 @@ def source(request, key):
         themes = os.listdir(os.path.join('templates', 'static', 'js', 'codemirror', 'theme'))
         css_files = list(map(lambda f: os.path.join('js', 'codemirror', 'theme', f), themes))
         themes = list(map(lambda t: t.split('.')[0], themes))
-        print(request.session.get('codeTheme'))
         return render(request, 'code/code.html', {
             'source' : code, 
             'partial_tags': partial_tags, 
@@ -220,5 +220,7 @@ def delete(request, key):
 def update_source(request, key):
     source = request.POST.get('source')
     language = request.POST.get('language')
+    theme = request.POST.get('theme')
+    request.session['codeTheme'] = theme
     problem = Code.objects.filter(pk = key).update(source = source, language = language, updatedAt = timezone.now())
     return redirect(reverse('repo_code_view', args = [key]))
