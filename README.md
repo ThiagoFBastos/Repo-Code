@@ -7,6 +7,14 @@ Repositório local feito com Django para gardar códigos e procurá-los através
 - [python3](https://www.python.org/downloads/)
 - [django](https://www.djangoproject.com/)
 
+## Ferramentas
+
+- É possível cadastrar um código juntamente com seu título, a sua descrição, que pode conter trechos em latex, e vinculá-lo a algumas categorias existentes.
+- É possível filtrar um código baseado no seu título, na sua descrição e na data de cadastramento.
+- É possível cadastrar tags juntamente com a sua descrição
+- É possível editar o código no editor de texto embutido na página do código.
+- É possível alterar o tema do editor para um dos existentes.
+
 ## Uso
 
 1. Coloque no terminal o seguinte comando: python3 manage.py runserver
