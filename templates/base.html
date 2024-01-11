@@ -24,7 +24,11 @@
 </head>
 <body>
 
-    <nav class = "navbar navbar-expand-lg bg-black navbar-dark">
+    {% if request.session.backgroundTheme == 'on' %}
+    <nav class = "navbar navbar-expand-lg bg-light navbar-light">
+    {% else %}
+    <nav class = "navbar navbar-expand-lg bg-dark navbar-dark">
+    {% endif %}
         <div class = "container-fluid">
             <a href = "{% url 'repo_inicio' %}" class="navbar-brand"> repo-code </a>
             <div class="collapse navbar-collapse">
