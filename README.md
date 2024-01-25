@@ -7,6 +7,10 @@ Repositório local feito com Django para gardar códigos e procurá-los através
 - [python3](https://www.python.org/downloads/)
 - [django](https://www.djangoproject.com/)
 
+## Instalação
+1. no terminal insira: python3 manage.py makemigrations
+2. depois: python3 manage.py migrate
+
 ## Ferramentas
 
 - É possível cadastrar um código juntamente com seu título, a sua descrição, que pode conter trechos em latex, e vinculá-lo a algumas categorias existentes.
