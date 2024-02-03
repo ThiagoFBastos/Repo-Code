@@ -78,7 +78,6 @@ def search_by_keywords(request):
 
     if len(tags):
         if logicTag == 'AND':
-            print(sources)
             subquery = Tag.objects.filter(Q(id__in = tags) & Q(code__id = OuterRef("pk"))) \
             .annotate(placeholder = Value(1)) \
             .values('placeholder') \

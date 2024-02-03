@@ -2,14 +2,12 @@
 
 Repositório local feito com Django para gardar códigos e procurá-los através de keywords e tags.
 
-## Requisitos
-
-- [python3](https://www.python.org/downloads/)
-- [django](https://www.djangoproject.com/)
-
 ## Instalação
-1. no terminal insira: python3 manage.py makemigrations
-2. depois: python3 manage.py migrate
+1. insira no terminal: python3 -m venv env
+2. insira no terminal: source ./env/bin/activate ou \env\Scripts\activate no windows
+3. insira no terminal: pip install -r requirements.txt
+4. insira no terminal: python3 manage.py makemigrations
+5. insira no terminal: python3 manage.py migrate
 
 ## Ferramentas
 
