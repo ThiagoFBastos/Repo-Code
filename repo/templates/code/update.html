@@ -84,13 +84,13 @@ repo-code
             <div class = "col">
                 <div class = "form-group">
                     <label> Título </label>
-                    <input class = "form-control" name = "title" value = "{{source.title}}">
+                    <input class = "form-control" name = "title" value = "{{source.title}}" required>
                 </div>
             </div>
             <div class = "col">
                 <div class = "form-group">
                     <label> Original </label>
-                    <input name = "original" class = "form-control" value = "{{source.original}}">
+                    <input name = "original" class = "form-control" value = "{{source.original}}" required>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@ repo-code
 
         <div class = "form-group">
             <label> Descrição </label>
-            <textarea class = "fix-theme" id = "description" class = "form-control" name = "description" rows = "25">{{source.description.strip}}</textarea>
+            <textarea class = "fix-theme" id = "description" class = "form-control" name = "description" rows = "25" required>{{source.description.strip}}</textarea>
         </div>
 
         <hr>
@@ -108,7 +108,7 @@ repo-code
             <select name = "tags" class = "form-control" multiple>
                 {% for tag in tags %}
                     {% if tag.id in tags_id %}
-                        <option class = "fix-theme" value = "{{tag.id}}" sselected> {{tag.human_name}} </option>
+                        <option class = "fix-theme" value = "{{tag.id}}" selected> {{tag.human_name}} </option>
                     {% else %}
                         <option class = "fix-theme" value = "{{tag.id}}"> {{tag.human_name}} </option>
                     {% endif %}

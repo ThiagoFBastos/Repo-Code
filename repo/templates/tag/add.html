@@ -26,18 +26,18 @@
         <form method = "post" action = "{% url 'repo_tag_add' %}" autocomplete = "off">
             {% csrf_token %}
             <div class = "form-group">
-                <label> Nome </label>
-                <input name = "name" class = "form-control">
+                <label>Nome</label>
+                <input name = "name" class = "form-control" required>
             </div>
             <hr>
             <div class = "form-group">
-                <label> Descrição (HTML) </label>
-                <textarea id = "description" name = "description" class = "form-control" wrap = "off"></textarea>
+                <label>Descrição (HTML)</label>
+                <textarea id = "description" name = "description" class = "form-control" wrap = "off" required></textarea>
             </div>
             <br>
             <div class = "text-end">
-                <button class = "btn btn-primary" type = "submit"> submeter </button>
-                <a class = "btn btn-secondary" href = "{% url 'repo_tag_add' %}"> cancelar </a>
+                <button class = "btn btn-primary" type = "submit">submeter</button>
+                <a class = "btn btn-secondary" href = "{% url 'repo_tag_add' %}">cancelar</a>
             </div>
         </form>
     </div>
