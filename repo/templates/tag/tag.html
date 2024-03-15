@@ -6,8 +6,7 @@ Tag: {{ tag.human_name }}
 
 {% block 'main' %}
 
-{% if sources.all.count > 0 %}
-    <div class = "container-fluid">
+<div class = "container-fluid">
     <div class = "row">
         <h1>
             {{ tag.human_name }}
@@ -19,99 +18,93 @@ Tag: {{ tag.human_name }}
             {{ tag.description | safe }}
         </p>
     </div>
-    <div class = "row">
-        <h2>Resultados</h2>
-    </div>
-
-    <table class = "table">
-        <thead>
-            <tr>
-                <th>
-                    <a href = "{{ URL_FLIP_CREATEDAT }}"> 
-                        Adicionado em
-                        {% if asc %}
-                            &#8595;
-                        {% else %}
-                            &#8593;
-                        {% endif %}
-                    </a>
-                </th>
-                <th>Título</th>
-                <th>Tags</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for source in sources.all %}
+    {% if sources.all.count > 0 %}
+        <div class = "row">
+            <h2>Resultados</h2>
+        </div>
+        <table class = "table">
+            <thead>
                 <tr>
-                    <td>
-                        {{ source.createdAt }}
-                    </td>
-                    <td>
-                        <a href = "{% url 'repo_code_view' source.id %}" class = "btn btn-link">{{ source.title }}</a>
-                    </td>
-                    <td>
-                        {% for tag in source.tags.all %}
-                            <a href = "{% url 'repo_tag_view' tag.id %}">{{tag.human_name}}</a>
-                            <br>
-                        {% endfor %}
-                    </td>
+                    <th>
+                        <a href = "{{ URL_FLIP_CREATEDAT }}"> 
+                            Adicionado em
+                            {% if asc %}
+                                &#8595;
+                            {% else %}
+                                &#8593;
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>Título</th>
+                    <th>Tags</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for source in sources.all %}
+                    <tr>
+                        <td>
+                            {{ source.createdAt }}
+                        </td>
+                        <td>
+                            <a href = "{% url 'repo_code_view' source.id %}" class = "btn btn-link">{{ source.title }}</a>
+                        </td>
+                        <td>
+                            {% for tag in source.tags.all %}
+                                <a href = "{% url 'repo_tag_view' tag.id %}">{{tag.human_name}}</a>
+                                <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <nav>
-        <ul class = "pagination justify-content-center">
-            
-            {% if URL_PREVIOUS %}
-                <li class="page-item">
-                    <a class="page-link" href="{{URL_PREVIOUS}}">&lsaquo;</a>
-                </li> 
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">&lsaquo;</a>
-                </li>
-            {% endif %}
-
-            {% if URL_FIRST %}
-                <li class="page-item">
-                    <a class="page-link" href="{{URL_FIRST}}">1</a>
-                </li> 
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">...</a>
-                </li>
-            {% endif %}
-
-            {% for page, current, URL in URL_PAGES %}
-                {% if current %}
-                <li class = "page-item active">
-                    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
-                </li>
+        <nav>
+            <ul class = "pagination justify-content-center">
+                
+                {% if URL_PREVIOUS %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{URL_PREVIOUS}}">&lsaquo;</a>
+                    </li> 
                 {% else %}
-                <div class = "page-item">
-                    <a href = "{{URL}}" class = "page-link"> {{page}} </a>
-                </div>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">&lsaquo;</a>
+                    </li>
                 {% endif %}
-            {% endfor %}
 
-            {% if URL_NEXT %}
-                <li class="page-item">
-                    <a class="page-link" href="{{URL_NEXT}}">&rsaquo;</a>
-                </li> 
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">&rsaquo;</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+                {% if URL_FIRST %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{URL_FIRST}}">1</a>
+                    </li> 
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">...</a>
+                    </li>
+                {% endif %}
+
+                {% for page, current, URL in URL_PAGES %}
+                    {% if current %}
+                    <li class = "page-item active">
+                        <a href = "{{URL}}" class = "page-link"> {{page}} </a>
+                    </li>
+                    {% else %}
+                    <div class = "page-item">
+                        <a href = "{{URL}}" class = "page-link"> {{page}} </a>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if URL_NEXT %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{URL_NEXT}}">&rsaquo;</a>
+                    </li> 
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">&rsaquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 </div>
-
-{% else %}
-        <h1 class = "text-center text-warning"> Nenhum resultado foi encontrado </h1>
-            <p class="text-center">
-                Tente outros parâmetros que fornecam um resultado válido
-            </p>
-{% endif %}
 
 {% endblock %}

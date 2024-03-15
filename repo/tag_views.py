@@ -65,23 +65,18 @@ def tag_results(request, key):
         return render(request, '404.html', {'message': ex})
 
     total_results = tag.code_set.count()
+    total_pages = (total_results + MAX_ITEMS_PER_PAGE - 1) // MAX_ITEMS_PER_PAGE
 
     sources = tag.code_set.order_by(['-', ''][asc] + 'createdAt')[low : high]
 
     URL_FLIP_CREATEDAT_PARAMS = {'page': page, 'asc': asc ^ 1}
     URL_FLIP_CREATEDAT = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_FLIP_CREATEDAT_PARAMS)}"
 
-    URL_PREVIOUS_PARAMS = {
-        'page': page - 1,
-        'asc': asc
-    }
+    URL_PREVIOUS_PARAMS = {'page': page - 1, 'asc': asc}
 
     URL_PREVIOUS = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_PREVIOUS_PARAMS)}"
 
-    URL_NEXT_PARAMS = {
-        'page': page + 1,
-        'asc': asc
-    }
+    URL_NEXT_PARAMS = {'page': page + 1, 'asc': asc}
 
     URL_FIRST_PARAMS = {'page': 1, 'asc': asc ^ 1}
     URL_FIRST = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_FIRST_PARAMS)}"
@@ -90,24 +85,31 @@ def tag_results(request, key):
 
     URL_PAGES = []
 
-    start_delta = max(1, page - 2) - page
+    if total_pages < 5 or page <= 2:
+        delta = page - 1
+    elif page >= 3 and page + 2 <= total_pages:
+        delta = 2
+    elif page >= 4 and page + 1 <= total_pages:
+        delta = 3
+    else:
+        delta = 4
 
-    for delta in range(start_delta, start_delta + 5):
-        p = page + delta
-        if p > 0 and (p - 1) * MAX_ITEMS_PER_PAGE < total_results:
-            URL_PARAMS = {'page': p, 'asc': asc}
+    for i in range(5):
+        curPage = page - delta + i
+        if curPage <= total_pages:
+            URL_PARAMS = {'page': curPage, 'asc': asc}
             URL = f"{reverse('repo_tag_view', args = [key])}?{urlencode(URL_PARAMS)}"
-            URL_PAGES.append((p, p == page , URL))
+            URL_PAGES.append((curPage, curPage == page , URL))
 
     return render(request, 'tag/tag.html', {'tag' : tag,
-    'sources' : sources,
-    'URL_FLIP_CREATEDAT': URL_FLIP_CREATEDAT,
-    'asc' : asc,
-    'URL_PAGES': URL_PAGES,
-    'total_results': total_results,
-    'URL_PREVIOUS': URL_PREVIOUS if page > 1 else None,
-    'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else None,
-    'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else None
+        'sources' : sources,
+        'URL_FLIP_CREATEDAT': URL_FLIP_CREATEDAT,
+        'asc' : asc,
+        'URL_PAGES': URL_PAGES,
+        'total_results': total_results,
+        'URL_PREVIOUS': URL_PREVIOUS if page > 1 else False,
+        'URL_NEXT': URL_NEXT if page < total_pages else False,
+        'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else False
     })
 
 @require_http_methods(['GET'])
