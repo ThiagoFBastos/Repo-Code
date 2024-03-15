@@ -49,12 +49,12 @@
             {% csrf_token %}
             <div class = "form-group">
                 <label> Nome </label>
-                <input name = "name" class = "form-control" value = "{{tag.name}}" required>
+                <input name = "name" class = "form-control" value = "{{tag.name}}">
             </div>
             <hr>
             <div class = "form-group">
                 <label> Descrição </label>
-                <textarea id = "description" name = "description" class = "form-control" wrap = "off" required>{{tag.description}}</textarea>
+                <textarea id = "description" name = "description" class = "form-control" wrap = "off">{{tag.description}}</textarea>
             </div>
             <br>
             <div class = "text-end">

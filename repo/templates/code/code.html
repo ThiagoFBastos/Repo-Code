@@ -45,7 +45,7 @@
             </ul>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
     </div>
@@ -59,12 +59,11 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}>
-            Tem certeza que dejesa salvar este código ? <br>
-            Essa ação não poderá ser desfeita.
+            Tem certeza que dejesa salvar este código ?
           </div>
           <div class="modal-footer">
             <button type="button" id = "btnSubmitSourceForm" class="btn btn-primary" data-bs-dismiss="modal">Salvar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
     </div>
@@ -230,13 +229,8 @@
         return -1;
     }
 
-    $("#language").on("change", function() {
+    $("#language").on("change", function () {
         let index = $(this).prop("selectedIndex");
-
-        let child = $($(this).children()[index]);
-
-        let language = $(child).prop("innerHTML").trim();
-        
 
         modes.sort((a, b) => {
             if(a.lang < b.lang) return -1;
@@ -263,9 +257,7 @@
 
     $("#theme").on("change", themeColorChange);
    
-    $("#theme").ready(function() {
-        themeColorChange();
-    })
+    $("#theme").ready(() => themeColorChange());
 
     $("#btnSubmitSourceForm").on("click", () => $("#sourceForm").submit());
 </script>

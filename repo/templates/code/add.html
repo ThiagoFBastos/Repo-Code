@@ -38,32 +38,32 @@ repo-code
             <div class = "col">
                 <div class = "form-group">
                     <label> Título </label>
-                    <input class = "form-control" name = "title" required>
+                    <input class = "form-control" name = "title">
                 </div>
             </div>
             <div class = "col">
                 <div class = "form-group">
                     <label> Original </label>
-                    <input name = "original" class = "form-control" required>
+                    <input name = "original" class = "form-control">
                 </div>
             </div>
         </div>
         <hr>
         <div class = "form-group">
             <label> Descrição (HTML) </label>
-            <textarea id = "description" class = "form-control" name = "description" rows = "25" required></textarea>
+            <textarea id = "description" class = "form-control" name = "description" rows = "25"></textarea>
         </div>
         <hr>
         <div class = "form-group">
             <label> Código fonte </label>
-            <textarea id = "source" class = "form-control" name = "source" wrap = "off" autocomplete = "off" required></textarea>
+            <textarea id = "source" class = "form-control" name = "source" wrap = "off" autocomplete = "off"></textarea>
         </div>
         <hr>
         <div class = "row">
             <div class = "col">
                  <div class = "form-group">
                     <label> Linguagem </label>
-                    <select id = "language" name = "language" class = "form-control" required>
+                    <select id = "language" name = "language" class = "form-control">
                         {% for lang, hulang in languages %}
                             <option value = "{{lang}}"> {{hulang}} </option>
                         {% endfor %}

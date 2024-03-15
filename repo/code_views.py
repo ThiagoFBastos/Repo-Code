@@ -94,87 +94,51 @@ def search_by_keywords(request):
             OR = OR | Q(description__contains = textKeywords[i])
         condition = condition & OR
 
-    if language != '-1': condition = condition & Q(language = language)
+    if language != '-1': 
+        condition = condition & Q(language = language)
 
     sources = sources.filter(condition).distinct()
 
     sources = sources.order_by('createdAt') if asc == 1 else sources.order_by('-createdAt')
 
     total_results = sources.count()
+    total_pages = (total_results + MAX_ITEMS_PER_PAGE - 1) // MAX_ITEMS_PER_PAGE
 
     sources = sources[low : high]
 
-    URL_FLIP_CREATEDAT_PARAMS = {'page': page,
-                                 'asc': asc ^ 1,
-                                 'title': title,
-                                 'language': language,
-                                 'fromDate': fromDate,
-                                 'toDate': toDate,
-                                 'tags': tags,
-                                 'logicTag': logicTag
-                                }
+    URL_FLIP_CREATEDAT_PARAMS = {'page': page, 'asc': asc ^ 1, 'title': title, 'language': language, 'fromDate': fromDate, 'toDate': toDate, 'tags': tags, 'logicTag': logicTag}
 
     URL_FLIP_CREATEDAT = f"{reverse('repo_search_by_keys')}?{urlencode(URL_FLIP_CREATEDAT_PARAMS, True)}"
 
-    URL_PREVIOUS_PARAMS = {
-        'title': title,
-        'asc': asc,
-        'page': page - 1,
-        'language': language,
-        'fromDate': fromDate,
-        'toDate': toDate,
-        'tags': tags,
-        'logicTag': logicTag
-    }
+    URL_PREVIOUS_PARAMS = {'title': title, 'asc': asc, 'page': page - 1, 'language': language, 'fromDate': fromDate, 'toDate': toDate, 'tags': tags, 'logicTag': logicTag}
 
     URL_PREVIOUS = f"{reverse('repo_search_by_keys')}?{urlencode(URL_PREVIOUS_PARAMS, True)}"
 
-    URL_NEXT_PARAMS = {
-        'title': title,
-        'asc': asc,
-        'page': page + 1,
-        'language': language,
-        'fromDate': fromDate,
-        'toDate': toDate,
-        'tags': tags,
-        'logicTag': logicTag
-    }
+    URL_NEXT_PARAMS = {'title': title, 'asc': asc, 'page': page + 1, 'language': language, 'fromDate': fromDate, 'toDate': toDate, 'tags': tags, 'logicTag': logicTag}
 
     URL_NEXT = f"{reverse('repo_search_by_keys')}?{urlencode(URL_NEXT_PARAMS, True)}"
 
     URL_PAGES = []
 
-    URL_FIRST_PARAMS = {
-        'title': title,
-        'asc': asc,
-        'page': 1,
-        'language': language,
-        'fromDate': fromDate,
-        'toDate': toDate,
-        'tags': tags,
-        'logicTag': logicTag
-    }
+    URL_FIRST_PARAMS = {'title': title, 'asc': asc, 'page': 1, 'language': language, 'fromDate': fromDate, 'toDate': toDate, 'tags': tags, 'logicTag': logicTag}
 
     URL_FIRST = f"{reverse('repo_search_by_keys')}?{urlencode(URL_FIRST_PARAMS, True)}"
 
+    if total_pages < 5 or page <= 2: 
+        delta = page - 1
+    elif page >= 3 and page + 2 <= total_pages: 
+        delta = 2
+    elif page >= 4 and page + 1 <= total_pages: 
+        delta = 3
+    else: 
+        delta = 4
 
-    start_delta = max(1, page - 2) - page
-
-    for delta in range(start_delta, start_delta + 5):
-        p = page + delta
-
-        if p > 0 and (p - 1) * MAX_ITEMS_PER_PAGE < total_results:
-            URL_PARAMS = {'title': title,
-                          'asc': asc,
-                          'page': p,
-                          'language': language,
-                          'fromDate': fromDate,
-                          'toDate': toDate,
-                          'tags': tags,
-                          'logicTag': logicTag
-                          }
+    for i in range(0, 5):
+        curPage = page - delta + i
+        if curPage <= total_pages:
+            URL_PARAMS = {'title': title, 'asc': asc, 'page': curPage, 'language': language, 'fromDate': fromDate, 'toDate': toDate, 'tags': tags, 'logicTag': logicTag}
             URL = f"{reverse('repo_search_by_keys')}?{urlencode(URL_PARAMS, True)}"
-            URL_PAGES.append((p, p == page , URL))
+            URL_PAGES.append((curPage, curPage == page , URL))
 
     return render(request, 'code/search_by_keys.html', {
         'sources': sources,
@@ -183,8 +147,8 @@ def search_by_keywords(request):
         'asc': asc,
         'total_results': total_results,
         'URL_PREVIOUS': URL_PREVIOUS if page > 1 else False,
-        'URL_NEXT': URL_NEXT if page * MAX_ITEMS_PER_PAGE < total_results else False,
-        'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else None
+        'URL_NEXT': URL_NEXT if page < total_pages else False,
+        'URL_FIRST': URL_FIRST if len(URL_PAGES) and URL_PAGES[0][0] > 1 else False
     })
 
 @require_http_methods(['GET', 'POST'])
