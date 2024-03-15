@@ -32,16 +32,13 @@ repo-code
 <div class="modal fade" id="modalDelete" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title"> Exclusão </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label = "Close"></button>
              </div>
-
             <div class="modal-body">
                 Tem certeza que deseja excluir pernamentemente este código?
             </div>
-
             <div class="modal-footer">
                 <form method = "POST" action = "{% url 'repo_code_delete' source.id %}">
                     {% csrf_token %}
@@ -56,19 +53,15 @@ repo-code
 <div class="modal fade" id="modalUpdate" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}> Ação </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label = "Close"></button>
              </div>
-
             <div class="modal-body" {% if request.session.backgroundTheme == 'on' %}style="color:black"{% endif %}>
-                Tem certeza que deseja salvar esses dados pernamentemente? <br>
-                Essa ação não poderá ser desfeita
+                Tem certeza que deseja salvar esses dados pernamentemente?
             </div>
-
             <div class="modal-footer">
-                <button id = "btnSubmitForm" class="btn btn-primary" type = "submit">Salvar </a>
+                <button id = "btnSubmitForm" class="btn btn-primary" type = "submit">Salvar </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div>
@@ -76,9 +69,9 @@ repo-code
 </div>
 
 <div class = "container">
-    <h1 class = "text-center">Alterando: {{source.title}}</h1>
+    <h1 class = "text-center">{{source.title}}</h1>
     <p class = "text-center">altere aqui o seu código e a sua descrição</p>
-    <form id = "updateForm" method = "post" autocomplete = "off">
+    <form id = "updateForm" method = "post" autocomplete = "off" action = "{% url 'repo_code_update' source.id %}">
         {% csrf_token %}
         <div class = "row">
             <div class = "col">
@@ -95,14 +88,11 @@ repo-code
             </div>
         </div>
         <hr>
-
         <div class = "form-group">
             <label> Descrição </label>
             <textarea class = "fix-theme" id = "description" class = "form-control" name = "description" rows = "25">{{source.description.strip}}</textarea>
         </div>
-
         <hr>
-
         <div class = "form-group">
             <label> Tags </label>
             <select name = "tags" class = "form-control" multiple>
@@ -115,17 +105,15 @@ repo-code
                 {% endfor %}
             </select>
         </div>
-
         <hr>
-
         <div class = "row">
             <div class = "col text-start">
-                <a href="{% url 'repo_code_view' source.id %}" class = "btn btn-success"> &larr; ir para a página principal</a>
+                <a href = "{% url 'repo_code_view' source.id %}" class = "btn btn-success"> &larr; voltar</a>
             </div>
             <div class = "col text-end">
-                <button type = "button" class = "btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUpdate"> submeter </button>
+                <a role = "button" class = "btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUpdate"> submeter </a>
                 <a role = "button" class = "btn btn-danger" href = "#" data-bs-toggle="modal" data-bs-target="#modalDelete"> deletar </a>
-                <a role = "button" class = "btn btn-secondary" href = "{% url 'repo_code_update' source.id %}"> cancelar </a>
+                <a class = "btn btn-secondary" href = "{% url 'repo_code_update' source.id %}"> cancelar </a>
             </div>
         </div>
     </form>

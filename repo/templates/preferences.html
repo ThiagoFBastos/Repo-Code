@@ -6,7 +6,7 @@ Preferências
 
 {% block 'main' %}
     <div class = "container" style = "width:300px">
-        <form action = "" method = "post">
+        <form action = "{% url 'repo_preferences' %}" method = "post">
             {% csrf_token %}
             <div class = "form-check form-switch text-center">
               <input class="form-check-input" type="checkbox" name = "backgroundTheme" {% if request.session.backgroundTheme == 'on' %} checked {% endif %}}>
